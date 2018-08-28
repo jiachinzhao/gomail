@@ -47,3 +47,14 @@ func (a *loginAuth) Next(fromServer []byte, more bool) ([]byte, error) {
 		return nil, fmt.Errorf("gomail: unexpected server challenge: %s", fromServer)
 	}
 }
+
+//add to avoid error "unencrypted connection" when disabled ssl and tls
+type unencryptedAuth struct {
+	smtp.Auth
+}
+
+func (a unencryptedAuth) Start(server *smtp.ServerInfo) (string, []byte, error) {
+	s := *server
+	s.TLS = true
+	return a.Auth.Start(&s)
+}
