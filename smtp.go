@@ -99,7 +99,10 @@ func (d *Dialer) Dial() (SendCloser, error) {
 					host:     d.Host,
 				}
 			} else {
-				d.Auth = smtp.PlainAuth("", d.Username, d.Password, d.Host)
+				//			d.Auth = smtp.PlainAuth("", d.Username, d.Password, d.Host)
+				d.Auth = unencryptedAuth{
+					smtp.PlainAuth("", d.Username, d.Password, d.Host),
+				}
 			}
 		}
 	}
